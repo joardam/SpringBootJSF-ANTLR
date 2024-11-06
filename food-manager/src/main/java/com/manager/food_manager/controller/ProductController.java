@@ -1,4 +1,4 @@
-package controller;
+package com.manager.food_manager.controller;
 
 import com.manager.food_manager.model.Product;
 import com.manager.food_manager.service.ProductService;
