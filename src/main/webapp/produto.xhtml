@@ -10,13 +10,47 @@
 
 <body>
 
-<h1> Cadastro de Cliente </h1>
-<h:form>
+<h1> Cadastro de Produto </h1>
+<h:form id = "frmProduct">
     Nome: <h:inputText value="#{productController.product.name}" />
     Preço: <h:inputText value="#{productController.product.price}" />
     Unidade: <h:inputText value="#{productController.product.unity}"/>
-    <h:commandButton value="Salvar" action="#{productController.save}" />
+    <h:commandButton value="Salvar" action="#{productController.save}" >
+        <f:ajax execute="frmProduct" render="@form" />
+    </h:commandButton>
 
+    <h:commandButton rendered="#{productController.editMode}" value="Cancelar" action="#{productController.cancel}" >
+        <f:ajax execute="frmProduct" render="@form" />
+    </h:commandButton>
+
+    <h:dataTable value = "#{productController.products}" var="c" id="dtProduct">
+        <h:column>
+            <f:facet name="header">Nome</f:facet>
+            #{c.name}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Preço</f:facet>
+            #{c.price}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Unidade</f:facet>
+            #{c.unity}
+        </h:column>
+
+        <h:column>
+            <f:facet name="header">Ação</f:facet>
+            <h:commandButton value="Excluir" action="#{productController.delete(c)}" onclick="return window.confirm('confirma ?')">
+                <f:ajax render="@form"/>
+            </h:commandButton>
+
+            <h:commandButton value="Editar" action="#{productController.edit(c)}">
+                <f:ajax render="@form"/>
+            </h:commandButton>
+        </h:column>
+
+
+
+    </h:dataTable>
 </h:form>
 
 

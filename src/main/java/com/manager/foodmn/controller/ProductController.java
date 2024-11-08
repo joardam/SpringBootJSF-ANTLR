@@ -3,6 +3,7 @@ package com.manager.foodmn.controller;
 import com.manager.foodmn.model.Product;
 import com.manager.foodmn.repository.ProductRepository;
 import com.manager.foodmn.service.ProductService;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import lombok.Getter;
@@ -21,14 +22,50 @@ public class ProductController {
     @Autowired
 //    private ProductService productService=;
     private ProductRepository productRepository;
+
+    @Getter
+    @Setter
+    private List<Product>  products;
+
     @Getter
     @Setter
     private Product product = new Product();
 
+    @Getter
+    @Setter
+    private boolean editMode = false;
+
+    @PostConstruct
+   public void init(){
+       products = productRepository.findAll();
+   }
 
     public void save()
     {
-        productRepository.save(product);
+        productRepository.save(this.product);
+        if(!editMode){
+            products.add(this.product);
+            this.editMode = false;
+        }
+
+        this.product = new Product();
+    }
+
+    public void delete(Product product){
+        productRepository.delete(product);
+        products.remove(product);
+
+    }
+
+
+    public void edit(Product product){
+        this.editMode = true;
+        this.product = product;
+    }
+
+    public void cancel(){
+        this.editMode = false;
+        this.product = new Product();
     }
 
 //    @GetMapping
