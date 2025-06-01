@@ -1,8 +1,7 @@
-package com.manager.foodmn.service;
+package com.manager.foodmn.product.service;
 
-import com.manager.foodmn.model.Product;
-import com.manager.foodmn.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.manager.foodmn.product.model.Product;
+import com.manager.foodmn.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,11 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService{
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Override
     public Product save(Product product) {
@@ -37,6 +39,11 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void deleteById(Long id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void deletebyObject(Product product){
+        productRepository.delete(product);
     }
 
 }

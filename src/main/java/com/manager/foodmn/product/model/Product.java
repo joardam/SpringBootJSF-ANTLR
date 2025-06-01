@@ -1,4 +1,4 @@
-package com.manager.foodmn.model;
+package com.manager.foodmn.product.model;
 
 import lombok.Data;
 
