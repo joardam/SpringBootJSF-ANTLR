@@ -1,0 +1,79 @@
+# Compiled Java class files
+*.class
+
+# Log files
+*.log
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Generated files
+target/
+out/
+build/
+
+# IDEs
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+*.orig
+
+# VS Code
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Maven
+.mvn/
+!**/src/main/**/mvnw
+!**/src/main/**/mvnw.cmd
+mvnw
+mvnw.cmd
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Hibernate
+hibernate.log
+
+# JSF Facelets
+*.xhtml~  # arquivos temporários salvos por alguns editores
+
+# Logs e arquivos temporários
+*.tmp
+*.swp
+*.bak
+
+# Banco de dados H2 (se usar localmente)
+*.h2.db
+*.mv.db
+
+# Arquivos de configuração sensíveis (caso crie)
+application-local.properties
+application-dev.properties
+.env
+.env.*
+
+# Arquivos temporários de deploy
+*.deploy*
