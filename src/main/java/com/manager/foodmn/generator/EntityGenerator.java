@@ -56,7 +56,7 @@ public class EntityGenerator {
             generateRepository(className, entityFolderName);
             generateServiceInterface(className, entityFolderName);
             generateServiceImplementation(className, entityFolderName);
-            //generateController(className, entityFolderName);
+            generateController(className, entityFolderName);
             //generateView(className, entityFolderName, ctx.fieldDef());
 
             return null;
@@ -227,10 +227,79 @@ public class EntityGenerator {
             }
         }
 
+        private void generateController(String className, String entityFolderName) {
+            StringBuilder sb = new StringBuilder();
+            String controllerClassName = className + "Controller";
+            String serviceInterfaceName = className + "Service";
+            String serviceVariableName = serviceInterfaceName.substring(0, 1).toLowerCase() + serviceInterfaceName.substring(1);
+            String instanceVariableName = className.toLowerCase();
+            String listVariableName = instanceVariableName + "s";
 
+            sb.append("package com.manager.foodmn.").append(entityFolderName).append(".controller;\n\n");
 
+            sb.append("import com.manager.foodmn.").append(entityFolderName).append(".model.").append(className).append(";\n");
+            sb.append("import com.manager.foodmn.").append(entityFolderName).append(".service.").append(serviceInterfaceName).append(";\n");
+            sb.append("import jakarta.annotation.PostConstruct;\n");
+            sb.append("import jakarta.faces.view.ViewScoped;\n");
+            sb.append("import jakarta.inject.Inject;\n");
+            sb.append("import jakarta.inject.Named;\n");
+            sb.append("import lombok.Data;\n");
+            sb.append("import java.util.List;\n\n");
 
+            sb.append("@Named\n");
+            sb.append("@Data\n");
+            sb.append("@ViewScoped\n");
+            sb.append("public class ").append(controllerClassName).append(" {\n\n");
 
+            sb.append("    @Inject\n");
+            sb.append("    private ").append(serviceInterfaceName).append(" ").append(serviceVariableName).append(";\n\n");
+
+            sb.append("    private List<").append(className).append(">  ").append(listVariableName).append(";\n");
+            sb.append("    private ").append(className).append(" ").append(instanceVariableName).append(" = new ").append(className).append("();\n\n");
+
+            sb.append("    private boolean editMode = false;\n\n");
+
+            sb.append("    @PostConstruct\n");
+            sb.append("    public void init() {\n");
+            sb.append("        this.").append(listVariableName).append(" = ").append(serviceVariableName).append(".findAll();\n");
+            sb.append("    }\n\n");
+
+            sb.append("    public void save() {\n");
+            sb.append("        ").append(serviceVariableName).append(".save(this.").append(instanceVariableName).append(");\n");
+            sb.append("        if(!editMode){\n");
+            sb.append("            ").append(listVariableName).append(".add(this.").append(instanceVariableName).append(");\n");
+            sb.append("        }\n");
+            sb.append("        this.").append(instanceVariableName).append(" = new ").append(className).append("();\n");
+            sb.append("        this.editMode = false;\n");
+            sb.append("    }\n\n");
+
+            sb.append("    public void delete(").append(className).append(" ").append(instanceVariableName).append("){\n");
+            sb.append("        ").append(serviceVariableName).append(".deletebyObject(").append(instanceVariableName).append(");\n");
+            sb.append("        ").append(listVariableName).append(".remove(").append(instanceVariableName).append(");\n");
+            sb.append("    }\n\n");
+
+            sb.append("    public void edit(").append(className).append(" ").append(instanceVariableName).append("){\n");
+            sb.append("        this.editMode = true;\n");
+            sb.append("        this.").append(instanceVariableName).append(" = ").append(instanceVariableName).append(";\n");
+            sb.append("    }\n\n");
+
+            sb.append("    public void cancel(){\n");
+            sb.append("        this.editMode = false;\n");
+            sb.append("        this.").append(instanceVariableName).append(" = new ").append(className).append("();\n");
+            sb.append("    }\n\n");
+
+            sb.append("}\n");
+
+            Path outFile = Paths.get("src/main/java/com/manager/foodmn/" + entityFolderName + "/controller/" + controllerClassName + ".java");
+            try {
+                Files.createDirectories(outFile.getParent());
+                Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                System.out.println("Classe de controller gerada com sucesso: " + outFile);
+            } catch (IOException e) {
+                System.err.println("Erro ao gerar a classe de controller para " + className);
+                e.printStackTrace();
+            }
+        }
 
     }
 }
