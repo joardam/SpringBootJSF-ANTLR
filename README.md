@@ -59,7 +59,7 @@ cd springbootjsf-antlr
 ### 2. Configure o Banco de Dados
 
 * Certifique-se de que o **PostgreSQL** está instalado e em execução.
-* Crie um banco de dados chamado `foodmanager`.
+* Crie um banco de dados chamado `springbootjsf_antlr`.
 * Ajuste o arquivo `src/main/resources/application.properties` com sua URL, usuário e senha, se forem diferentes do padrão (`postgres/postgres`).
 
 ### 3. Execute a Aplicação
