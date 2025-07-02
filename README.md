@@ -143,11 +143,5 @@ springbootjsf-antlr/
 
 ---
 
-## 📄 Licença
 
-[MIT](LICENSE)
 
-```
-
-Se quiser, posso gerar uma versão `.md` pronta para download. Deseja isso?
-```
