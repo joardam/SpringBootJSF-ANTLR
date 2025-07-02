@@ -55,7 +55,7 @@ public class EntityGenerator {
             generateModel(className, entityFolderName, ctx.fieldDef());
             generateRepository(className, entityFolderName);
             generateServiceInterface(className, entityFolderName);
-            //generateServiceImplementation(className, entityFolderName);
+            generateServiceImplementation(className, entityFolderName);
             //generateController(className, entityFolderName);
             //generateView(className, entityFolderName, ctx.fieldDef());
 
@@ -156,6 +156,73 @@ public class EntityGenerator {
                 System.out.println("Interface de serviço gerada com sucesso: " + outFile);
             } catch (IOException e) {
                 System.err.println("Erro ao gerar a interface de serviço para " + className);
+                e.printStackTrace();
+            }
+        }
+        private void generateServiceImplementation(String className, String entityFolderName) {
+            StringBuilder sb = new StringBuilder();
+            String serviceInterfaceName = className + "Service";
+            String serviceImplName = className + "ServiceImpl";
+            String repositoryClassName = className + "Repository";
+            String repositoryVariableName = repositoryClassName.substring(0, 1).toLowerCase() + repositoryClassName.substring(1);
+            String modelVariableName = className.substring(0, 1).toLowerCase() + className.substring(1);
+
+            sb.append("package com.manager.foodmn.").append(entityFolderName).append(".service;\n\n");
+
+            sb.append("import com.manager.foodmn.").append(entityFolderName).append(".model.").append(className).append(";\n");
+            sb.append("import com.manager.foodmn.").append(entityFolderName).append(".repository.").append(repositoryClassName).append(";\n");
+            sb.append("import org.springframework.stereotype.Service;\n");
+            sb.append("import java.util.List;\n");
+            sb.append("import java.util.Optional;\n\n");
+
+            sb.append("@Service\n");
+            sb.append("public class ").append(serviceImplName).append(" implements ").append(serviceInterfaceName).append("{\n\n");
+
+            sb.append("    private final ").append(repositoryClassName).append(" ").append(repositoryVariableName).append(";\n\n");
+
+            sb.append("    public ").append(serviceImplName).append("(").append(repositoryClassName).append(" ").append(repositoryVariableName).append(") {\n");
+            sb.append("        this.").append(repositoryVariableName).append(" = ").append(repositoryVariableName).append(";\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public ").append(className).append(" save(").append(className).append(" ").append(modelVariableName).append(") {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".save(").append(modelVariableName).append(");\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public List<").append(className).append("> findAll() {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".findAll();\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public Optional<").append(className).append("> findById(Long id) {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".findById(id);\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public ").append(className).append(" update(").append(className).append(" ").append(modelVariableName).append(") {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".save(").append(modelVariableName).append(");\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public void deleteById(Long id) {\n");
+            sb.append("        ").append(repositoryVariableName).append(".deleteById(id);\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public void deletebyObject(").append(className).append(" ").append(modelVariableName).append("){\n");
+            sb.append("        ").append(repositoryVariableName).append(".delete(").append(modelVariableName).append(");\n");
+            sb.append("    }\n\n");
+
+            sb.append("}\n");
+
+            Path outFile = Paths.get("src/main/java/com/manager/foodmn/" + entityFolderName + "/service/" + serviceImplName + ".java");
+            try {
+                Files.createDirectories(outFile.getParent());
+                Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                System.out.println("Classe de implementação de serviço gerada com sucesso: " + outFile);
+            } catch (IOException e) {
+                System.err.println("Erro ao gerar a classe de implementação de serviço para " + className);
                 e.printStackTrace();
             }
         }
