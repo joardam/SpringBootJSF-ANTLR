@@ -57,7 +57,7 @@ public class EntityGenerator {
             generateServiceInterface(className, entityFolderName);
             generateServiceImplementation(className, entityFolderName);
             generateController(className, entityFolderName);
-            //generateView(className, entityFolderName, ctx.fieldDef());
+            generateView(className, entityFolderName, ctx.fieldDef());
 
             return null;
         }
@@ -159,6 +159,7 @@ public class EntityGenerator {
                 e.printStackTrace();
             }
         }
+
         private void generateServiceImplementation(String className, String entityFolderName) {
             StringBuilder sb = new StringBuilder();
             String serviceInterfaceName = className + "Service";
@@ -301,5 +302,75 @@ public class EntityGenerator {
             }
         }
 
+        private void generateView(String className, String entityFolderName, List<EntityDefParser.FieldDefContext> fields) {
+            StringBuilder sb = new StringBuilder();
+            String controllerName = className.substring(0, 1).toLowerCase() + className.substring(1) + "Controller";
+            String instanceName = className.toLowerCase();
+            String listName = instanceName + "s";
+            String formId = "frm" + className;
+            String dataTableId = "dt" + className;
+
+            sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            sb.append("<!DOCTYPE html>\n");
+            sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"\n");
+            sb.append("      xmlns:h=\"http://xmlns.jcp.org/jsf/html\"\n");
+            sb.append("      xmlns:ui=\"http://xmlns.jcp.org/jsf/facelets\"\n");
+            sb.append("      xmlns:f=\"http://xmlns.jcp.org/jsf/core\">\n\n");
+
+            sb.append("<h:head></h:head>\n\n");
+            sb.append("<body>\n\n");
+            sb.append("<h1> Cadastro de ").append(className).append(" </h1>\n");
+            sb.append("<h:form id = \"").append(formId).append("\">\n");
+
+            for (EntityDefParser.FieldDefContext field : fields) {
+                String fieldName = field.ID().getText();
+                String capitalizedFieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                sb.append("    ").append(capitalizedFieldName).append(": <h:inputText value=\"#{").append(controllerName).append(".").append(instanceName).append(".").append(fieldName).append("}\" />\n");
+            }
+
+            sb.append("    <h:commandButton value=\"Salvar\" action=\"#{").append(controllerName).append(".save}\" >\n");
+            sb.append("        <f:ajax execute=\"").append(formId).append("\" render=\"@form\" />\n");
+            sb.append("    </h:commandButton>\n\n");
+
+            sb.append("    <h:commandButton rendered=\"#{").append(controllerName).append(".editMode}\" value=\"Cancelar\" action=\"#{").append(controllerName).append(".cancel}\" >\n");
+            sb.append("        <f:ajax execute=\"").append(formId).append("\" render=\"@form\" />\n");
+            sb.append("    </h:commandButton>\n\n");
+
+            sb.append("    <h:dataTable value = \"#{").append(controllerName).append(".").append(listName).append("}\" var=\"c\" id=\"").append(dataTableId).append("\">\n");
+
+            for (EntityDefParser.FieldDefContext field : fields) {
+                String fieldName = field.ID().getText();
+                String capitalizedFieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                sb.append("        <h:column>\n");
+                sb.append("            <f:facet name=\"header\">").append(capitalizedFieldName).append("</f:facet>\n");
+                sb.append("            #{c.").append(fieldName).append("}\n");
+                sb.append("        </h:column>\n");
+            }
+
+            sb.append("        <h:column>\n");
+            sb.append("            <f:facet name=\"header\">Ação</f:facet>\n");
+            sb.append("            <h:commandButton value=\"Excluir\" action=\"#{").append(controllerName).append(".delete(c)}\" onclick=\"return window.confirm('confirma ?')\">\n");
+            sb.append("                <f:ajax render=\"@form\"/>\n");
+            sb.append("            </h:commandButton>\n\n");
+
+            sb.append("            <h:commandButton value=\"Editar\" action=\"#{").append(controllerName).append(".edit(c)}\">\n");
+            sb.append("                <f:ajax render=\"@form\"/>\n");
+            sb.append("            </h:commandButton>\n");
+            sb.append("        </h:column>\n");
+            sb.append("    </h:dataTable>\n");
+            sb.append("</h:form>\n\n");
+            sb.append("</body>\n\n");
+            sb.append("</html>");
+
+            Path outFile = Paths.get("src/main/webapp/" + instanceName + ".xhtml");
+            try {
+                Files.createDirectories(outFile.getParent());
+                Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                System.out.println("Arquivo de view gerado com sucesso: " + outFile);
+            } catch (IOException e) {
+                System.err.println("Erro ao gerar o arquivo de view para " + className);
+                e.printStackTrace();
+            }
+        }
     }
 }
