@@ -52,7 +52,7 @@ A principal funcionalidade é um **gerador de código** que utiliza ANTLR para c
 ### 1. Clone o repositório
 
 ```bash
-git clone <url-do-seu-repositorio>
+git clone <https://github.com/joardam/SpringBootJSF-ANTLR>
 cd springbootjsf-antlr
 ````
 
