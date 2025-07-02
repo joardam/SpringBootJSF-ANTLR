@@ -1,0 +1,5 @@
+entity Aluno {
+        String nomeCompleto
+        Long matricula
+        Integer idade
+        }

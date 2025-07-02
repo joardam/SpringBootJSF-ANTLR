@@ -103,6 +103,7 @@
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr4-maven-plugin</artifactId>
 				<version>4.13.1</version>
+
 				<executions>
 					<execution>
 						<goals>
@@ -111,7 +112,9 @@
 					</execution>
 				</executions>
 				<configuration>
+					<sourceDirectory>src/main/java</sourceDirectory>
 					<outputDirectory>target/generated-sources/antlr4</outputDirectory>
+					<visitor>true</visitor>
 				</configuration>
 			</plugin>
 		</plugins>

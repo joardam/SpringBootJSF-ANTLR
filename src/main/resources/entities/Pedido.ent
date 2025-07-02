@@ -1,0 +1,6 @@
+entity Pedido {
+        Long numero
+        Date data
+        BigDecimal valorTotal
+        String status
+        }
