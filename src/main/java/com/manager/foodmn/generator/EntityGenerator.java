@@ -55,9 +55,9 @@ public class EntityGenerator {
             generateModel(className, entityFolderName, ctx.fieldDef());
             generateRepository(className, entityFolderName);
             generateServiceInterface(className, entityFolderName);
-            //generateServiceImplementation(className, entityFolderName);
-            //generateController(className, entityFolderName);
-            //generateView(className, entityFolderName, ctx.fieldDef());
+            generateServiceImplementation(className, entityFolderName);
+            generateController(className, entityFolderName);
+            generateView(className, entityFolderName, ctx.fieldDef());
 
             return null;
         }
@@ -65,7 +65,6 @@ public class EntityGenerator {
         private void generateModel(String className, String entityFolderName, List<EntityDefParser.FieldDefContext> fields) {
             StringBuilder sb = new StringBuilder();
 
-            // Alteração: Adicionado "domain" ao pacote
             sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".model;\n\n");
 
             sb.append("import jakarta.persistence.Entity;\n");
@@ -94,7 +93,6 @@ public class EntityGenerator {
 
             sb.append("}\n");
 
-            // Alteração: Adicionado "domain" ao caminho do arquivo
             Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/model/" + className + ".java");
             try {
                 Files.createDirectories(outFile.getParent());
@@ -110,17 +108,14 @@ public class EntityGenerator {
             StringBuilder sb = new StringBuilder();
             String repositoryClassName = className + "Repository";
 
-            // Alteração: Adicionado "domain" ao pacote
             sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".repository;\n\n");
 
-            // Alteração: Adicionado "domain" ao import
             sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".model.").append(className).append(";\n");
             sb.append("import org.springframework.data.jpa.repository.JpaRepository;\n\n");
 
             sb.append("public interface ").append(repositoryClassName).append(" extends JpaRepository<").append(className).append(", Long> {\n");
             sb.append("\n}\n");
 
-            // Alteração: Adicionado "domain" ao caminho do arquivo
             Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/repository/" + repositoryClassName + ".java");
             try {
                 Files.createDirectories(outFile.getParent());
@@ -137,10 +132,8 @@ public class EntityGenerator {
             String serviceInterfaceName = className + "Service";
             String modelVariableName = className.substring(0, 1).toLowerCase() + className.substring(1);
 
-            // Alteração: Adicionado "domain" ao pacote
             sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".service;\n\n");
 
-            // Alteração: Adicionado "domain" ao import
             sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".model.").append(className).append(";\n");
             sb.append("import java.util.List;\n");
             sb.append("import java.util.Optional;\n\n");
@@ -156,7 +149,6 @@ public class EntityGenerator {
 
             sb.append("}\n");
 
-            // Alteração: Adicionado "domain" ao caminho do arquivo
             Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/service/" + serviceInterfaceName + ".java");
             try {
                 Files.createDirectories(outFile.getParent());
@@ -164,6 +156,207 @@ public class EntityGenerator {
                 System.out.println("Interface de serviço gerada com sucesso: " + outFile);
             } catch (IOException e) {
                 System.err.println("Erro ao gerar a interface de serviço para " + className);
+                e.printStackTrace();
+            }
+        }
+
+        private void generateServiceImplementation(String className, String entityFolderName) {
+            StringBuilder sb = new StringBuilder();
+            String serviceInterfaceName = className + "Service";
+            String serviceImplName = className + "ServiceImpl";
+            String repositoryClassName = className + "Repository";
+            String repositoryVariableName = repositoryClassName.substring(0, 1).toLowerCase() + repositoryClassName.substring(1);
+            String modelVariableName = className.substring(0, 1).toLowerCase() + className.substring(1);
+
+            sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".service;\n\n");
+
+            sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".model.").append(className).append(";\n");
+            sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".repository.").append(repositoryClassName).append(";\n");
+            sb.append("import org.springframework.stereotype.Service;\n");
+            sb.append("import java.util.List;\n");
+            sb.append("import java.util.Optional;\n\n");
+
+            sb.append("@Service\n");
+            sb.append("public class ").append(serviceImplName).append(" implements ").append(serviceInterfaceName).append("{\n\n");
+
+            sb.append("    private final ").append(repositoryClassName).append(" ").append(repositoryVariableName).append(";\n\n");
+            sb.append("    public ").append(serviceImplName).append("(").append(repositoryClassName).append(" ").append(repositoryVariableName).append(") {\n");
+            sb.append("        this.").append(repositoryVariableName).append(" = ").append(repositoryVariableName).append(";\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public ").append(className).append(" save(").append(className).append(" ").append(modelVariableName).append(") {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".save(").append(modelVariableName).append(");\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public List<").append(className).append("> findAll() {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".findAll();\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public Optional<").append(className).append("> findById(Long id) {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".findById(id);\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public ").append(className).append(" update(").append(className).append(" ").append(modelVariableName).append(") {\n");
+            sb.append("        return ").append(repositoryVariableName).append(".save(").append(modelVariableName).append(");\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public void deleteById(Long id) {\n");
+            sb.append("        ").append(repositoryVariableName).append(".deleteById(id);\n");
+            sb.append("    }\n\n");
+
+            sb.append("    @Override\n");
+            sb.append("    public void deletebyObject(").append(className).append(" ").append(modelVariableName).append("){\n");
+            sb.append("        ").append(repositoryVariableName).append(".delete(").append(modelVariableName).append(");\n");
+            sb.append("    }\n\n");
+
+            sb.append("}\n");
+
+            Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/service/" + serviceImplName + ".java");
+            try {
+                Files.createDirectories(outFile.getParent());
+                Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                System.out.println("Classe de implementação de serviço gerada com sucesso: " + outFile);
+            } catch (IOException e) {
+                System.err.println("Erro ao gerar a classe de implementação de serviço para " + className);
+                e.printStackTrace();
+            }
+        }
+
+        private void generateController(String className, String entityFolderName) {
+            StringBuilder sb = new StringBuilder();
+            String controllerClassName = className + "Controller";
+            String serviceInterfaceName = className + "Service";
+            String serviceVariableName = serviceInterfaceName.substring(0, 1).toLowerCase() + serviceInterfaceName.substring(1);
+            String instanceVariableName = className.toLowerCase();
+            String listVariableName = instanceVariableName + "s";
+
+            sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".controller;\n\n");
+
+            sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".model.").append(className).append(";\n");
+            sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".service.").append(serviceInterfaceName).append(";\n");
+            sb.append("import jakarta.annotation.PostConstruct;\n");
+            sb.append("import jakarta.faces.view.ViewScoped;\n");
+            sb.append("import jakarta.inject.Inject;\n");
+            sb.append("import jakarta.inject.Named;\n");
+            sb.append("import lombok.Data;\n");
+            sb.append("import java.util.List;\n\n");
+
+            sb.append("@Named\n");
+            sb.append("@Data\n");
+            sb.append("@ViewScoped\n");
+            sb.append("public class ").append(controllerClassName).append(" {\n\n");
+
+            sb.append("    @Inject\n");
+            sb.append("    private ").append(serviceInterfaceName).append(" ").append(serviceVariableName).append(";\n\n");
+
+            sb.append("    private List<").append(className).append(">  ").append(listVariableName).append(";\n");
+            sb.append("    private ").append(className).append(" ").append(instanceVariableName).append(" = new ").append(className).append("();\n\n");
+
+            sb.append("    private boolean editMode = false;\n\n");
+            sb.append("    @PostConstruct\n");
+            sb.append("    public void init() {\n");
+            sb.append("        this.").append(listVariableName).append(" = ").append(serviceVariableName).append(".findAll();\n");
+            sb.append("    }\n\n");
+            sb.append("    public void save() {\n");
+            sb.append("        ").append(serviceVariableName).append(".save(this.").append(instanceVariableName).append(");\n");
+            sb.append("        if(!editMode){\n");
+            sb.append("            ").append(listVariableName).append(".add(this.").append(instanceVariableName).append(");\n");
+            sb.append("        }\n");
+            sb.append("        this.").append(instanceVariableName).append(" = new ").append(className).append("();\n");
+            sb.append("        this.editMode = false;\n");
+            sb.append("    }\n\n");
+            sb.append("    public void delete(").append(className).append(" ").append(instanceVariableName).append("){\n");
+            sb.append("        ").append(serviceVariableName).append(".deletebyObject(").append(instanceVariableName).append(");\n");
+            sb.append("        ").append(listVariableName).append(".remove(").append(instanceVariableName).append(");\n");
+            sb.append("    }\n\n");
+            sb.append("    public void edit(").append(className).append(" ").append(instanceVariableName).append("){\n");
+            sb.append("        this.editMode = true;\n");
+            sb.append("        this.").append(instanceVariableName).append(" = ").append(instanceVariableName).append(";\n");
+            sb.append("    }\n\n");
+            sb.append("    public void cancel(){\n");
+            sb.append("        this.editMode = false;\n");
+            sb.append("        this.").append(instanceVariableName).append(" = new ").append(className).append("();\n");
+            sb.append("    }\n\n");
+
+            sb.append("}\n");
+            Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/controller/" + controllerClassName + ".java");
+            try {
+                Files.createDirectories(outFile.getParent());
+                Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                System.out.println("Classe de controller gerada com sucesso: " + outFile);
+            } catch (IOException e) {
+                System.err.println("Erro ao gerar a classe de controller para " + className);
+                e.printStackTrace();
+            }
+        }
+
+        private void generateView(String className, String entityFolderName, List<EntityDefParser.FieldDefContext> fields) {
+            StringBuilder sb = new StringBuilder();
+            String controllerName = className.substring(0, 1).toLowerCase() + className.substring(1) + "Controller";
+            String instanceName = className.toLowerCase();
+            String listName = instanceName + "s";
+            String formId = "frm" + className;
+            String dataTableId = "dt" + className;
+
+            sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            sb.append("<!DOCTYPE html>\n");
+            sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"\n");
+            sb.append("      xmlns:h=\"http://xmlns.jcp.org/jsf/html\"\n");
+            sb.append("      xmlns:ui=\"http://xmlns.jcp.org/jsf/facelets\"\n");
+            sb.append("      xmlns:f=\"http://xmlns.jcp.org/jsf/core\">\n\n");
+
+            sb.append("<h:head></h:head>\n\n");
+            sb.append("<body>\n\n");
+            sb.append("<h1> Cadastro de ").append(className).append(" </h1>\n");
+            sb.append("<h:form id = \"").append(formId).append("\">\n");
+            for (EntityDefParser.FieldDefContext field : fields) {
+                String fieldName = field.ID().getText();
+                String capitalizedFieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                sb.append("    ").append(capitalizedFieldName).append(": <h:inputText value=\"#{").append(controllerName).append(".").append(instanceName).append(".").append(fieldName).append("}\" />\n");
+            }
+
+            sb.append("    <h:commandButton value=\"Salvar\" action=\"#{").append(controllerName).append(".save}\" >\n");
+            sb.append("        <f:ajax execute=\"").append(formId).append("\" render=\"@form\" />\n");
+            sb.append("    </h:commandButton>\n\n");
+            sb.append("    <h:commandButton rendered=\"#{").append(controllerName).append(".editMode}\" value=\"Cancelar\" action=\"#{").append(controllerName).append(".cancel}\" >\n");
+            sb.append("        <f:ajax execute=\"").append(formId).append("\" render=\"@form\" />\n");
+            sb.append("    </h:commandButton>\n\n");
+
+            sb.append("    <h:dataTable value = \"#{").append(controllerName).append(".").append(listName).append("}\" var=\"c\" id=\"").append(dataTableId).append("\">\n");
+            for (EntityDefParser.FieldDefContext field : fields) {
+                String fieldName = field.ID().getText();
+                String capitalizedFieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                sb.append("        <h:column>\n");
+                sb.append("            <f:facet name=\"header\">").append(capitalizedFieldName).append("</f:facet>\n");
+                sb.append("            #{c.").append(fieldName).append("}\n");
+                sb.append("        </h:column>\n");
+            }
+
+            sb.append("        <h:column>\n");
+            sb.append("            <f:facet name=\"header\">Ação</f:facet>\n");
+            sb.append("            <h:commandButton value=\"Excluir\" action=\"#{").append(controllerName).append(".delete(c)}\" onclick=\"return window.confirm('confirma ?')\">\n");
+            sb.append("                <f:ajax render=\"@form\"/>\n");
+            sb.append("            </h:commandButton>\n\n");
+            sb.append("            <h:commandButton value=\"Editar\" action=\"#{").append(controllerName).append(".edit(c)}\">\n");
+            sb.append("                <f:ajax render=\"@form\"/>\n");
+            sb.append("            </h:commandButton>\n");
+            sb.append("        </h:column>\n");
+            sb.append("    </h:dataTable>\n");
+            sb.append("</h:form>\n\n");
+            sb.append("</body>\n\n");
+            sb.append("</html>");
+            Path outFile = Paths.get("src/main/webapp/" + instanceName + ".xhtml");
+            try {
+                Files.createDirectories(outFile.getParent());
+                Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                System.out.println("Arquivo de view gerado com sucesso: " + outFile);
+            } catch (IOException e) {
+                System.err.println("Erro ao gerar o arquivo de view para " + className);
                 e.printStackTrace();
             }
         }

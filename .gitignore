@@ -88,4 +88,4 @@ application-dev.properties
 /src/main/webapp/*
 
 # Não ignora o arquivo aluno.xhtml
-!/src/main/webapp/aluno.xhtml
+!/src/main/webapp/produto.xhtml
