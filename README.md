@@ -1,147 +1,129 @@
+# Spring Boot, JSF & ANTLR: Gerador de CRUD Dinâmico
 
+Este projeto é uma aplicação web robusta que demonstra o poder da combinação entre **Spring Boot**, **Jakarta Server Faces (JSF)** com **PrimeFaces** e **ANTLR**. Sua principal funcionalidade é um gerador de código que, a partir de arquivos de definição de entidade simples, cria um CRUD (Create, Read, Update, Delete) completo e funcional, incluindo **Model**, **Repository**, **Service**, **Controller** e a **View** com PrimeFaces.
 
-
-# SpringBootJSF-ANTLR
-
-Este projeto é uma aplicação web desenvolvida com **Spring Boot**, **Jakarta Server Faces (JSF)** e **ANTLR**.  
-A principal funcionalidade é um **gerador de código** que utiliza ANTLR para criar um CRUD completo (Model, Repository, Service, Controller e View JSF) a partir de arquivos de definição de entidade personalizados.
+O sistema já vem com um CRUD de **Produto** como exemplo funcional e um menu dinâmico que se atualiza automaticamente a cada nova entidade gerada.
 
 ---
 
-## ✨ Funcionalidades
+## 🚀 Tecnologias Utilizadas
 
-- **Geração de Código com ANTLR**: Cria automaticamente toda a estrutura de CRUD para novas entidades a partir de arquivos de definição simples (`.ent`).
-- **CRUD de Produtos**: Inclui um exemplo funcional para a entidade `Produto`, que pode ser usado como referência.
-- **Backend com Spring Boot**: Utiliza Spring Data JPA e uma estrutura robusta baseada em boas práticas.
-- **Frontend com JSF**: Interface construída com JSF, integrada ao Spring Boot por meio do JoinFaces.
-
----
-
-## 🧰 Tecnologias Utilizadas
-
-### Backend
-
-- Java 17  
-- Spring Boot 3.3.5  
-- Spring Web  
-- Spring Data JPA  
-- Hibernate  
-- Lombok  
-
-### Frontend
-
-- Jakarta Server Faces (JSF)  
-- JoinFaces 5.3.0  
-
-### Banco de Dados
-
-- PostgreSQL  
-
-### Build & Dependências
-
-- Maven  
-
-### Geração de Código
-
-- ANTLR 4.13.1  
+* **Backend:** Java 17, Spring Boot, Spring Data JPA, Hibernate
+* **Frontend:** Jakarta Server Faces (JSF), PrimeFaces, JoinFaces
+* **Banco de Dados:** PostgreSQL
+* **Geração de Código:** ANTLR 4
+* **Build:** Maven
+* **Ambiente:** Otimizado para GitHub Codespaces & Docker
 
 ---
 
-## 🚀 Como Executar o Projeto
+## ☁️ Guia de Início Rápido com GitHub Codespaces
 
-### 1. Clone o repositório
+Este projeto é pré-configurado para funcionar perfeitamente com o GitHub Codespaces, que cria um ambiente de desenvolvimento completo e pronto para uso no seu navegador.
+
+1. **Abra no Codespaces**
+
+   * Na página principal do seu repositório no GitHub, clique no botão verde **"<> Code"**, vá para a aba **"Codespaces"** e clique em **"Create codespace on main"**.
+
+2. **Aguarde a Mágica**
+   O Codespaces irá automaticamente:
+
+   * Montar um contêiner Docker com Java, Maven e PostgreSQL.
+   * Instalar todas as dependências do Maven (`mvn install`).
+   * Disponibilizar o terminal do VS Code no seu navegador.
+
+3. **Rode a Aplicação**
+
+   * Abra um novo terminal no Codespace e execute:
+
+     ```bash
+     mvn spring-boot:run
+     ```
+
+4. **Acesse a Aplicação**
+
+   * O Codespaces detectará que a porta **8080** está em uso e fará o encaminhamento automaticamente. Uma notificação aparecerá no canto inferior direito da tela. Clique em **"Abrir no Navegador"** para ver sua aplicação funcionando.
+
+---
+
+## ⚙️ Gerando um Novo CRUD
+
+O coração do projeto é o gerador de código. Siga os passos abaixo para criar um CRUD completo para uma nova entidade (ex: `Categoria`).
+
+### 1. Crie o Arquivo de Definição da Entidade
+
+* **Localização:** `src/main/resources/entities/`
+* **Exemplo:** `src/main/resources/entities/Categoria.ent`
+
+```ent
+entity Categoria {
+    String nome
+    String descricao
+}
+```
+
+**Regras:**
+
+* A primeira linha deve ser `entity NomeDaEntidade {`.
+* O campo `id` é gerado automaticamente.
+* Cada campo é definido como `TipoDeDado nomeDoCampo`.
+* Tipos de dados aceitos: `String`, `Integer`, `Double`, `BigDecimal`.
+
+### 2. Execute o Gerador de Código
+
+Para transformar o arquivo `.ent` em código Java e XHTML, execute a classe `EntityGenerator` via Maven, usando o perfil `generate-entities` configurado no `pom.xml`:
 
 ```bash
-git clone <https://github.com/joardam/SpringBootJSF-ANTLR>
-cd springbootjsf-antlr
-````
+mvn compile exec:java -P generate-entities
+```
 
-### 2. Configure o Banco de Dados
+O terminal exibirá a criação de todos os arquivos: Model, Repository, Service (Interface e Impl), Controller e a View `.xhtml`.
 
-* Certifique-se de que o **PostgreSQL** está instalado e em execução.
-* Crie um banco de dados chamado `springbootjsf_antlr`.
-* Ajuste o arquivo `src/main/resources/application.properties` com sua URL, usuário e senha, se forem diferentes do padrão (`postgres/postgres`).
+### 3. Reinicie a Aplicação
 
-### 3. Execute a Aplicação
+* Pare a aplicação que estava rodando (Ctrl + C).
+* Inicie-a novamente:
 
 ```bash
 mvn spring-boot:run
 ```
 
-A aplicação estará disponível em:
-👉 **[http://localhost:8080](http://localhost:8080)**
+Ao acessar a aplicação no navegador, o novo item **"Categoria"** aparecerá automaticamente no menu, e a página estará pronta para uso.
 
 ---
 
-## ⚙️ Geração de Código com ANTLR
+## 📦 Build do Projeto
 
-O coração do projeto é o **gerador de entidades**. Ele lê arquivos com a extensão `.ent` localizados em `src/main/resources/entities`.
-
-### 1. Crie um Arquivo de Definição
-
-Por exemplo, para criar a entidade `Category`, crie o arquivo:
+Para empacotar a aplicação em um arquivo `.war` (pronto para deploy em servidores como o Tomcat), utilize:
 
 ```bash
-src/main/resources/entities/Category.ent
+mvn clean package
 ```
 
-Com o conteúdo:
-
-```antlr
-entity Category {
-    name: String
-}
-```
-
-### 2. Execute o Gerador
-
-Execute a classe:
-
-```java
-com.manager.foodmn.generator.EntityGenerator
-```
-
-### 3. Estrutura Gerada
-
-O gerador criará os seguintes arquivos para a nova entidade:
-
-* **Model**:
-  `src/main/java/com/manager/foodmn/category/model/Category.java`
-
-* **Repository**:
-  `src/main/java/com/manager/foodmn/category/repository/CategoryRepository.java`
-
-* **Service (Interface e Implementação)**:
-  `src/main/java/com/manager/foodmn/category/service/`
-
-* **Controller**:
-  `src/main/java/com/manager/foodmn/category/controller/CategoryController.java`
-
-* **View (JSF)**:
-  `src/main/webapp/category.xhtml`
-
-> Após a geração, **reinicie a aplicação** para que as novas tabelas sejam criadas e a nova página esteja acessível.
+O arquivo final estará em `target/food-manager-0.0.1-SNAPSHOT.war`.
 
 ---
 
 ## 📁 Estrutura do Projeto
 
 ```
-springbootjsf-antlr/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/manager/foodmn/
-│   │   ├── resources/
+├── .devcontainer/      # Configuração do Docker e Codespaces
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com/manager/foodmn
+│   │   │       ├── config/         # Configurações do Spring (ex: redirect)
+│   │   │       ├── domain/         # Entidades geradas (ex: produto/)
+│   │   │       ├── generator/      # O gerador de código
+│   │   │       └── menu/           # Controller do menu dinâmico
+│   │   ├── resources
 │   │   │   ├── application.properties
-│   │   │   └── entities/
-│   │   │       └── Category.ent
+│   │   │   └── entities/           # >> Arquivos .ent aqui
 │   │   └── webapp/
-│   │       └── category.xhtml
-├── pom.xml
+│   │       ├── templates/          # Layout principal com o menu
+│   │       ├── index.xhtml         # Página inicial
+│   │       └── produto.xhtml       # View de exemplo gerada
+│   └── test/
+├── pom.xml             # Configuração do Maven
+└── README.md           # Esta documentação
 ```
-
----
-
-
-
