@@ -89,3 +89,5 @@ application-dev.properties
 
 # Não ignora o arquivo aluno.xhtml
 !/src/main/webapp/produto.xhtml
+!/src/main/webapp/index.xhtml
+!/src/main/webapp/templates/
