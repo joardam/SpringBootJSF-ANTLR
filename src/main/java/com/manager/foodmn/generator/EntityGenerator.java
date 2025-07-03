@@ -65,7 +65,8 @@ public class EntityGenerator {
         private void generateModel(String className, String entityFolderName, List<EntityDefParser.FieldDefContext> fields) {
             StringBuilder sb = new StringBuilder();
 
-            sb.append("package com.manager.foodmn.").append(entityFolderName).append(".model;\n\n");
+            // Alteração: Adicionado "domain" ao pacote
+            sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".model;\n\n");
 
             sb.append("import jakarta.persistence.Entity;\n");
             sb.append("import jakarta.persistence.Id;\n");
@@ -93,7 +94,8 @@ public class EntityGenerator {
 
             sb.append("}\n");
 
-            Path outFile = Paths.get("src/main/java/com/manager/foodmn/" + entityFolderName + "/model/" + className + ".java");
+            // Alteração: Adicionado "domain" ao caminho do arquivo
+            Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/model/" + className + ".java");
             try {
                 Files.createDirectories(outFile.getParent());
                 Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -108,15 +110,18 @@ public class EntityGenerator {
             StringBuilder sb = new StringBuilder();
             String repositoryClassName = className + "Repository";
 
-            sb.append("package com.manager.foodmn.").append(entityFolderName).append(".repository;\n\n");
+            // Alteração: Adicionado "domain" ao pacote
+            sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".repository;\n\n");
 
-            sb.append("import com.manager.foodmn.").append(entityFolderName).append(".model.").append(className).append(";\n");
+            // Alteração: Adicionado "domain" ao import
+            sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".model.").append(className).append(";\n");
             sb.append("import org.springframework.data.jpa.repository.JpaRepository;\n\n");
 
             sb.append("public interface ").append(repositoryClassName).append(" extends JpaRepository<").append(className).append(", Long> {\n");
             sb.append("\n}\n");
 
-            Path outFile = Paths.get("src/main/java/com/manager/foodmn/" + entityFolderName + "/repository/" + repositoryClassName + ".java");
+            // Alteração: Adicionado "domain" ao caminho do arquivo
+            Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/repository/" + repositoryClassName + ".java");
             try {
                 Files.createDirectories(outFile.getParent());
                 Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -132,9 +137,11 @@ public class EntityGenerator {
             String serviceInterfaceName = className + "Service";
             String modelVariableName = className.substring(0, 1).toLowerCase() + className.substring(1);
 
-            sb.append("package com.manager.foodmn.").append(entityFolderName).append(".service;\n\n");
+            // Alteração: Adicionado "domain" ao pacote
+            sb.append("package com.manager.foodmn.domain.").append(entityFolderName).append(".service;\n\n");
 
-            sb.append("import com.manager.foodmn.").append(entityFolderName).append(".model.").append(className).append(";\n");
+            // Alteração: Adicionado "domain" ao import
+            sb.append("import com.manager.foodmn.domain.").append(entityFolderName).append(".model.").append(className).append(";\n");
             sb.append("import java.util.List;\n");
             sb.append("import java.util.Optional;\n\n");
 
@@ -149,7 +156,8 @@ public class EntityGenerator {
 
             sb.append("}\n");
 
-            Path outFile = Paths.get("src/main/java/com/manager/foodmn/" + entityFolderName + "/service/" + serviceInterfaceName + ".java");
+            // Alteração: Adicionado "domain" ao caminho do arquivo
+            Path outFile = Paths.get("src/main/java/com/manager/foodmn/domain/" + entityFolderName + "/service/" + serviceInterfaceName + ".java");
             try {
                 Files.createDirectories(outFile.getParent());
                 Files.writeString(outFile, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -159,11 +167,5 @@ public class EntityGenerator {
                 e.printStackTrace();
             }
         }
-
-
-
-
-
-
     }
 }

@@ -1,4 +1,4 @@
-package com.manager.foodmn.product.model;
+package com.manager.foodmn.domain.product.model;
 
 import lombok.Data;
 

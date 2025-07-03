@@ -1,6 +1,6 @@
-package com.manager.foodmn.product.service;
+package com.manager.foodmn.domain.product.service;
 
-import com.manager.foodmn.product.model.Product;
+import com.manager.foodmn.domain.product.model.Product;
 
 import java.util.List;
 import java.util.Optional;
