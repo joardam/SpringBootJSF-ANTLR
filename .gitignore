@@ -82,7 +82,7 @@ application-dev.properties
 /src/main/java/com/manager/foodmn/domain/*
 
 # Não ignora o diretório de produto e seu conteúdo
-!/src/main/java/com/manager/foodmn/domain/product/
+!/src/main/java/com/manager/foodmn/domain/produto/
 
 # Ignora todos os arquivos no diretório webapp
 /src/main/webapp/*

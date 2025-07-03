@@ -1,7 +1,5 @@
-package com.manager.foodmn.domain.product.controller;
+package com.manager.foodmn.domain.produto.controller;
 
-import com.manager.foodmn.domain.product.model.Product;
-import com.manager.foodmn.domain.product.service.ProductService;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -9,6 +7,9 @@ import jakarta.inject.Named;
 import lombok.Data;
 
 import java.util.List;
+
+import com.manager.foodmn.domain.produto.model.Product;
+import com.manager.foodmn.domain.produto.service.ProductService;
 
 @Named
 @Data
