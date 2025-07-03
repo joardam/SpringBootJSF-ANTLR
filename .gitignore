@@ -77,3 +77,15 @@ application-dev.properties
 
 # Arquivos temporários de deploy
 *.deploy*
+
+# Ignora todo o conteúdo dentro do diretório domain
+/src/main/java/com/manager/foodmn/domain/*
+
+# Não ignora o diretório de produto e seu conteúdo
+!/src/main/java/com/manager/foodmn/domain/product/
+
+# Ignora todos os arquivos no diretório webapp
+/src/main/webapp/*
+
+# Não ignora o arquivo aluno.xhtml
+!/src/main/webapp/aluno.xhtml
