@@ -1,7 +1,8 @@
-package com.manager.foodmn.product.repository;
+package com.manager.foodmn.domain.produto.repository;
 
-import com.manager.foodmn.product.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.manager.foodmn.domain.produto.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 

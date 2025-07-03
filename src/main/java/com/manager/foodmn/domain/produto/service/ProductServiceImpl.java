@@ -1,8 +1,9 @@
-package com.manager.foodmn.product.service;
+package com.manager.foodmn.domain.produto.service;
 
-import com.manager.foodmn.product.model.Product;
-import com.manager.foodmn.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+
+import com.manager.foodmn.domain.produto.model.Product;
+import com.manager.foodmn.domain.produto.repository.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;

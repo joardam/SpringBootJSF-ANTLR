@@ -1,9 +1,9 @@
-package com.manager.foodmn.product.service;
-
-import com.manager.foodmn.product.model.Product;
+package com.manager.foodmn.domain.produto.service;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.manager.foodmn.domain.produto.model.Product;
 
 public interface ProductService {
 

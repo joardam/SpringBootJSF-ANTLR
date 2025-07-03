@@ -1,55 +1,54 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml">
 
-<h:head></h:head>
+    <ui:define name="content">
+        <h:form id="frmProduct">
+            <p:growl id="messages" showDetail="true"/>
 
-<body>
+            <p:panel id="panelProduct" header="Cadastro de Produto">
+                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="name" value="Name:" />
+                    <p:inputText id="name" value="#{productController.product.name}" required="true" />
+                    <p:outputLabel for="price" value="Price:" />
+                    <p:inputNumber id="price" value="#{productController.product.price}" required="true" />
+                    <p:outputLabel for="unity" value="Unity:" />
+                    <p:inputText id="unity" value="#{productController.product.unity}" required="true" />
+                </p:panelGrid>
 
-<h1> Cadastro de Produto </h1>
-<h:form id = "frmProduct">
-    Nome: <h:inputText value="#{productController.product.name}" />
-    Preço: <h:inputText value="#{productController.product.price}" />
-    Unidade: <h:inputText value="#{productController.product.unity}"/>
-    <h:commandButton value="Salvar" action="#{productController.save}" >
-        <f:ajax execute="frmProduct" render="@form" />
-    </h:commandButton>
+                <p:commandButton value="#{productController.editMode ? 'Atualizar' : 'Salvar'}" action="#{productController.save}" update="panelProduct dtProduct messages" />
+                <p:commandButton value="Cancelar" action="#{productController.cancel}" update="panelProduct" rendered="#{productController.editMode}" styleClass="ui-button-secondary" process="@this" />
+            </p:panel>
 
-    <h:commandButton rendered="#{productController.editMode}" value="Cancelar" action="#{productController.cancel}" >
-        <f:ajax execute="frmProduct" render="@form" />
-    </h:commandButton>
+            <p:dataTable id="dtProduct" var="item" value="#{productController.products}" style="margin-top: 20px;" paginator="true" rows="10">
+                <p:column headerText="Name">
+                    <h:outputText value="#{item.name}" />
+                </p:column>
+                <p:column headerText="Price">
+                    <h:outputText value="#{item.price}" />
+                </p:column>
+                <p:column headerText="Unity">
+                    <h:outputText value="#{item.unity}" />
+                </p:column>
+                <p:column headerText="Ações" style="width:100px; text-align: center">
+                    <p:commandButton icon="pi pi-pencil" action="#{productController.edit(item)}" update=":frmProduct:panelProduct" process="@this" styleClass="rounded-button ui-button-info" />
+                    <p:commandButton icon="pi pi-trash" oncomplete="PF('deleteDialog').show()" styleClass="rounded-button ui-button-danger" process="@this">
+                        <f:setPropertyActionListener value="#{item}" target="#{productController.selectedProduct}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
 
-    <h:dataTable value = "#{productController.products}" var="c" id="dtProduct">
-        <h:column>
-            <f:facet name="header">Nome</f:facet>
-            #{c.name}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Preço</f:facet>
-            #{c.price}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Unidade</f:facet>
-            #{c.unity}
-        </h:column>
+            <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" hideEffect="fade" header="Confirmação">
+                <p:outputPanel style="text-align:center;">
+                    <p>Você tem certeza que deseja excluir este item?</p>
+                    <p:commandButton value="Sim" action="#{productController.delete}" process="@this" oncomplete="PF('deleteDialog').hide()" update="dtProduct messages"/>
+                    <p:commandButton value="Não" onclick="PF('deleteDialog').hide()" styleClass="ui-button-secondary"/>
+                </p:outputPanel>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
 
-        <h:column>
-            <f:facet name="header">Ação</f:facet>
-            <h:commandButton value="Excluir" action="#{productController.delete(c)}" onclick="return window.confirm('confirma ?')">
-                <f:ajax render="@form"/>
-            </h:commandButton>
-
-            <h:commandButton value="Editar" action="#{productController.edit(c)}">
-                <f:ajax render="@form"/>
-            </h:commandButton>
-        </h:column>
-    </h:dataTable>
-</h:form>
-
-
-</body>
-
-</html>
+</ui:composition>
