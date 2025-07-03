@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"> <h:head>
+    <title>Projeto!</title>
+</h:head>
+
+<h:body>
+    <p:menubar>
+        <c:forEach items="#{menuController.menuItems}" var="item">
+            <p:menuitem value="#{item.label}" url="#{item.url}" icon="pi pi-file" />
+        </c:forEach>
+    </p:menubar>
+
+    <div class="ui-fluid" style="padding: 10px;">
+        <ui:insert name="content">
+            </ui:insert>
+    </div>
+</h:body>
+</html>

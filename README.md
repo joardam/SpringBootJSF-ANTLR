@@ -44,6 +44,17 @@ Este projeto é pré-configurado para funcionar perfeitamente com o GitHub Codes
 
    * O Codespaces detectará que a porta **8080** está em uso e fará o encaminhamento automaticamente. Uma notificação aparecerá no canto inferior direito da tela. Clique em **"Abrir no Navegador"** para ver sua aplicação funcionando.
 
+5. **Resolvendo Erro 401 (“Unauthorized”) no Codespaces**
+   
+   Caso a aplicação retorne um **Erro 401** ao acessar endpoints protegidos, pode ser que a porta não esteja visível externamente. Siga estes passos:
+
+   1. No canto inferior direito do Codespaces, clique no ícone **"Ports"** (🔌).
+   2. Localize a porta **8080** na lista (ou outra porta onde sua aplicação esteja rodando).
+   3. Clique clique com botão direito do mouse em **Visibilidade da Porta**.
+   4. modifique para **"Public"**.
+   5. Recarregue a página no navegador ou copie o link público gerado e abra-o.
+   6. Sua aplicação deve responder sem o erro 401.
+
 ---
 
 ## ⚙️ Gerando um Novo CRUD
