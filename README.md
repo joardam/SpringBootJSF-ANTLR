@@ -1,10 +1,7 @@
 # Spring Boot, JSF & ANTLR: Gerador de CRUD Dinâmico
 
 Integrantes : 
-GUILHERME SANTOS CARRAZZONI DE CARVALHO
-JOSÉ MÁRIO DA SILVA FILHO
-PEDRO HENRIQUE FRANÇA DIAS
-VINÍCIUS MOURA DE OLIVEIRA
+GUILHERME SANTOS CARRAZZONI DE CARVALHO, JOSÉ MÁRIO DA SILVA FILHO, PEDRO HENRIQUE FRANÇA DIAS, VINÍCIUS MOURA DE OLIVEIRA;
 
 Este projeto é uma aplicação web robusta que demonstra o poder da combinação entre **Spring Boot**, **Jakarta Server Faces (JSF)** com **PrimeFaces** e **ANTLR**. Sua principal funcionalidade é um gerador de código que, a partir de arquivos de definição de entidade simples, cria um CRUD (Create, Read, Update, Delete) completo e funcional, incluindo **Model**, **Repository**, **Service**, **Controller** e a **View** com PrimeFaces.
 
